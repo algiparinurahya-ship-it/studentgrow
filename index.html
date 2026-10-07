@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StudentGrow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#/">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="10" fill="#0F8F6F"/><path d="M17 27V15" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><path d="M17 17c0-4 2-6 7-6 0 4-2 6-7 6z" fill="#FFC94A"/><path d="M17 20c0-3-1.5-5-6-5 0 3 1.5 5 6 5z" fill="#fff"/></svg>
+    <span>StudentGrow</span>
+  </a>
+  <nav class="desk" id="deskNav"></nav>
+</header>
+<main id="app"></main>
+<footer class="foot">
+  <p>© StudentGrow · Platform pemasaran produk mahasiswa wirausaha</p>
+  <a href="#/login">Login Admin</a>
+</footer>
+<nav class="tabs" id="tabNav"></nav>
+<div id="modal" class="modal" hidden></div>
+<div id="toast" class="toast" hidden></div>
+<!-- Urutan penting: data dulu, lalu app -->
+<script src="js/data-sample.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
