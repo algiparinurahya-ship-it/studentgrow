@@ -1,7 +1,6 @@
 // =====================================================
-// StudentGrow - app.js (Tahap 1: tampilan + data contoh)
-// Semua pengambilan data lewat objek "api" di bawah.
-// Di Tahap 3, hanya isi "api" yang diganti ke Supabase.
+// StudentGrow - app.js (Tahap 3: terhubung ke Supabase)
+// Data diambil dari objek "api" di file js/supabase-api.js
 // =====================================================
 const $ = (s) => document.querySelector(s);
 const app = $("#app");
@@ -9,22 +8,10 @@ const rp = (n) => "Rp" + Number(n).toLocaleString("id-ID");
 const esc = (t) => String(t ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const wa = (num, text) => `https://wa.me/${num}?text=${encodeURIComponent(text || "Halo, saya tertarik dengan produk Anda di StudentGrow.")}`;
 
-// Gambar placeholder (ganti dengan image_url dari Supabase Storage nanti)
+// Gambar placeholder (dipakai kalau image_url kosong)
 const ph = (emoji) => "data:image/svg+xml," + encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><rect width='400' height='400' fill='#E3F4EE'/><text x='200' y='235' font-size='140' text-anchor='middle'>${emoji}</text></svg>`);
 const pImg = (p) => p.image_url || ph("🍽️");
 const sImg = (s) => s.profile_image_url || ph("🧑‍🎓");
-
-// ---------- LAPISAN DATA (GANTI DI TAHAP 3) ----------
-const apiSample = {
-  async categories() { return SAMPLE_CATEGORIES; },          // TODO Supabase: from('categories')
-  async sellers() { return SAMPLE_SELLERS; },                // TODO Supabase: from('sellers')
-  async products() { return SAMPLE_PRODUCTS; },              // TODO Supabase: from('products')
-  async createOrder(o) {                                      // TODO Supabase: insert ke 'orders'
-    const order = { id: SAMPLE_ORDERS.length + 1, order_code: "ORD-" + String(SAMPLE_ORDERS.length + 1).padStart(3, "0"), status: "Diproses", created_at: new Date().toISOString(), ...o };
-    SAMPLE_ORDERS.push(order);
-    return order;
-  }
-};
 
 // ---------- KOMPONEN KECIL ----------
 function toast(msg) {
@@ -62,7 +49,7 @@ function sellerCard(s) {
 // ---------- HALAMAN ----------
 async function viewHome() {
   const [products, sellers, cats] = await Promise.all([api.products(), api.sellers(), api.categories()]);
-  const featured = [...products].sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 4); // produk terbaru
+  const featured = [...products].sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 4);
   return `
   <section class="hero">
     <h1>StudentGrow</h1>
@@ -146,7 +133,6 @@ async function viewCategories() {
   return `<h2>Kategori</h2><div class="grid sel">${cats.map((c) => `<a class="card" href="#/produk?kategori=${c.id}" style="padding:18px"><h3>${esc(c.name)}</h3><span class="muted">${products.filter((p) => p.category_id === c.id).length} produk</span></a>`).join("")}</div>`;
 }
 
-// Halaman Pemesanan: pesanan dibuat dari tombol "Pesan" di Detail Produk
 function viewOrderInfo() {
   return `<h2>Pemesanan</h2><div class="state"><p>Untuk memesan, buka produk lalu tekan <b>Pesan</b>.</p><p style="margin-top:12px"><a class="btn" href="#/produk">Pilih produk</a></p></div>`;
 }
@@ -187,7 +173,10 @@ function openOrder(p) {
     try {
       const o = await api.createOrder({ buyer_name: name, product_id: p.id, quantity: qty });
       close(); toast(`Pesanan ${o.order_code} berhasil dikirim`);
-    } catch { toast("Pesanan gagal. Coba lagi."); }
+    } catch (err) {
+      console.error(err);
+      alert("Pesanan gagal: " + err.message);
+    }
   };
   $("#bn").focus();
 }
