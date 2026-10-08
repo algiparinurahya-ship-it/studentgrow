@@ -15,7 +15,7 @@ const pImg = (p) => p.image_url || ph("🍽️");
 const sImg = (s) => s.profile_image_url || ph("🧑‍🎓");
 
 // ---------- LAPISAN DATA (GANTI DI TAHAP 3) ----------
-const api = {
+const apiSample = {
   async categories() { return SAMPLE_CATEGORIES; },          // TODO Supabase: from('categories')
   async sellers() { return SAMPLE_SELLERS; },                // TODO Supabase: from('sellers')
   async products() { return SAMPLE_PRODUCTS; },              // TODO Supabase: from('products')
