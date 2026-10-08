@@ -15,8 +15,9 @@ async function sb(path, options = {}) {
       ...(options.headers || {})
     }
   });
-  if (!res.ok) throw new Error("Supabase error " + res.status + ": " + (await res.text()));
-  return res.status === 204 ? null : res.json();
+  const text = await res.text();
+  if (!res.ok) throw new Error("Supabase error " + res.status + ": " + text);
+  return text ? JSON.parse(text) : null;
 }
 
 const api = {
