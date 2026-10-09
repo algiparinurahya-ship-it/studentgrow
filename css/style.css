@@ -123,5 +123,5 @@ label{font-weight:700;font-size:.9rem;display:block;margin:12px 0 4px}
   .modal{align-items:center}
   .sheet{border-radius:28px}
   .foot{border-radius:32px}
-}
+}.hero::before{background-image:url(../IMG-20261009-WA0047.jpg)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
